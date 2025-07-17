@@ -11,14 +11,14 @@ import zipfile
 import gdown
 
 # Load model FOR LOCAL HOSTING
-# processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
-# MODEL_PATH = "model/checkpoint-5080"
-# model = VisionEncoderDecoderModel.from_pretrained(MODEL_PATH)
+processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
+MODEL_PATH = "/app/model/checkpoint-5080"
+model = VisionEncoderDecoderModel.from_pretrained(MODEL_PATH)
 
-MODEL_DIR = "model"
-MODEL_PATH = os.path.join(MODEL_DIR, "checkpoint-5080")
-MODEL_URL = "https://drive.google.com/uc?id=1z9gKcNF7EWzlJaJ0rLImc6M46YN7IIve"
-ZIP_PATH = os.path.join(MODEL_DIR, "models.zip")
+# MODEL_DIR = "model"
+# MODEL_PATH = os.path.join(MODEL_DIR, "checkpoint-5080")
+# MODEL_URL = "https://drive.google.com/uc?id=1z9gKcNF7EWzlJaJ0rLImc6M46YN7IIve"
+# ZIP_PATH = os.path.join(MODEL_DIR, "models.zip")
 
 
 def download_and_extract_model():
@@ -36,11 +36,11 @@ def download_and_extract_model():
     else:
         print("Model already exists. Skipping download.")
 
-download_and_extract_model()
+# download_and_extract_model()
 
-processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
-# MODEL_PATH = "model/model/checkpoint-5080"
-model = VisionEncoderDecoderModel.from_pretrained(MODEL_PATH)
+# processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
+# # MODEL_PATH = "model/model/checkpoint-5080"
+# model = VisionEncoderDecoderModel.from_pretrained(MODEL_PATH)
 
 def output_folder():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
