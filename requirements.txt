@@ -7,4 +7,3 @@ opencv-python
 pytesseract
 numpy
 requests
-zipfile
