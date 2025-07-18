@@ -2,6 +2,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.swp
 *.zip
-
 .git
+.gitignore
+test_image/
+model/
+runtime.txt

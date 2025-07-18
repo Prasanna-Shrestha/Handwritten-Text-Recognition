@@ -1,9 +1,9 @@
-# app.py
-from fastapi import FastAPI, File, UploadFile
+import os
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from predict import predict_from_image
+from predict import load_models, predict_from_image
 
-app = FastAPI()
+app = FastAPI(title="NoteBuddy OCR API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,12 +12,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Load models at startup (once)
+processor, model = load_models()
+
+
+@app.get("/")
+def home():
+    return {"message": "NoteBuddy OCR API is running. Use POST /predict."}
+
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tiff")):
+        raise HTTPException(status_code=400, detail="Unsupported file type.")
+
     try:
         image_bytes = await file.read()
-        text = predict_from_image(image_bytes)
-        return {"text": text}
+        result = predict_from_image(image_bytes, processor, model)
+        return result 
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))

@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Install system dependencies for OpenCV and Tesseract
+# System deps: tesseract, OpenCV runtime, unzip, wget, fonts (optional)
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
@@ -9,23 +9,26 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
+# Install Python deps first (cache layer)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install gdown
 
-# Download and unzip model from Google Drive
-RUN gdown --id 1z9gKcNF7EWzlJaJ0rLImc6M46YN7IIve -O models.zip \
- && unzip models.zip -d /app/model \
- && rm models.zip
+# Download model at build time (ONE TIME)
+# NOTE: this downloads to /app/model/
+RUN mkdir -p /app/model && \
+    gdown --id 1z9gKcNF7EWzlJaJ0rLImc6M46YN7IIve -O /app/model/models.zip && \
+    unzip /app/model/models.zip -d /app/model && \
+    rm /app/model/models.zip
 
-# Copy all application files
+# Copy application code
 COPY . .
 
-# Expose port 8000
+# (Optional) Env lets you override model path if structure inside zip differs
+ENV NOTE_BUDDY_MODEL_PATH=/app/model/checkpoint-5080
+
 EXPOSE 8000
 
-# Start FastAPI app
+# Start FastAPI (prod)
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

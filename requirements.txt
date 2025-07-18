@@ -1,11 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
+pillow
 torch
 transformers
-pillow
-opencv-python
 pytesseract
-numpy
-requests
-gdown
+opencv-python-headless
 python-multipart
+numpy
