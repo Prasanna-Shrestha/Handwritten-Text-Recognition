@@ -21,12 +21,8 @@ MAX_WORDS  = int(os.getenv("NOTE_BUDDY_MAX_WORDS", "200"))
 
 
 def load_models():
-    if not os.path.exists(MODEL_PATH):
-        raise RuntimeError(
-            f"Model path '{MODEL_PATH}' not found. Check Docker unzip and NOTE_BUDDY_MODEL_PATH."
-        )
-    processor = TrOCRProcessor.from_pretrained(BASE_PROCESSOR_ID)
-    model = VisionEncoderDecoderModel.from_pretrained(MODEL_PATH)
+    processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
+    model = VisionEncoderDecoderModel.from_pretrained("popPrasanna/trocr_handwritten")
     model.eval()
     return processor, model
 

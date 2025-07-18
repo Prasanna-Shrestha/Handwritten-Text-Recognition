@@ -15,12 +15,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && pip install gdown
 
-# Download model at build time (ONE TIME)
-# NOTE: this downloads to /app/model/
-RUN mkdir -p /app/model && \
-    gdown --id 1z9gKcNF7EWzlJaJ0rLImc6M46YN7IIve -O /app/model/models.zip && \
-    unzip /app/model/models.zip -d /app/model && \
-    rm /app/model/models.zip
 
 # Copy application code
 COPY . .
